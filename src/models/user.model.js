@@ -1,4 +1,6 @@
 import mongoose, {Schema} from "mongoose";
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt' // used for HASHING password
 
 const userSchema = new Schema({
     username: {
@@ -47,5 +49,23 @@ const userSchema = new Schema({
     }
 
 }, {timestamps: true})
+
+userSchema.pre("save", async function(next) {
+    // the conditionaning below ensures that, hashing is performed only when "password" field changes but not other fields. suppose if there is any change in any other field lets say avatar, the control, as expected goes to "pre" hook and the password is hashed again which is not a good thing. So if there is no modification in 'PASSWORD FIELD' then the password "should not be hashed" and the control should return back. this is done by the logic written below
+    if(!this.isModified("password")) return next()
+
+    this.password = bcrypt.hash(this.password, 10) // the number defines the number of rounds (Google to know more)
+    next()
+})
+
+userSchema.methods.isPasswordCorrect = async function(password) {
+
+    // the first argument is the original password send by the user whenever he calls the function and the second argument is the hashed password
+
+   return await bcrypt.compare(password, this.password) // this is for decrypting the password
+
+   // this returns true or false
+
+}
 
 export const User = mongoose.model("User", userSchema);
