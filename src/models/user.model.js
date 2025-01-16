@@ -1,5 +1,5 @@
 import mongoose, {Schema} from "mongoose";
-import jwt from 'jsonwebtoken'
+import jwt, { sign } from 'jsonwebtoken'
 import bcrypt from 'bcrypt' // used for HASHING password
 
 const userSchema = new Schema({
@@ -66,6 +66,33 @@ userSchema.methods.isPasswordCorrect = async function(password) {
 
    // this returns true or false
 
+}
+
+userSchema.methods.generateAcessToken = function() {
+    return jwt.sign(
+        {
+            _id: this._id,  // this id is present in DB
+            email: this.email,
+            username: this.username,
+            fullname: this.fullname
+        },
+        process.env.ACESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.ACESS_TOKEN_EXPIRY
+        }
+    )
+}
+
+userSchema.methods.generateRefreshToken = function() {
+    return jwt.sign(
+        {
+            _id: this._id,  // this id is present in DB
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+        }
+    )
 }
 
 export const User = mongoose.model("User", userSchema);
