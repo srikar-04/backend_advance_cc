@@ -44,6 +44,8 @@ const videoSchema = new Schema({
     }
 }, {timestamps: true});
 
+// pagination is the process of breaking large amount of data into small chunks. example if we have 1000 videos then we paginate the data and show only 10 or 15 videos at a single time
+
 videoSchema.plugin(mongooseAggregatePaginate)
 
 export const Video = mongoose.model("Video", videoSchema)
