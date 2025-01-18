@@ -1,7 +1,7 @@
 import multer from 'multer'
 
 const storage = multer.diskStorage( {
-    destination: function (req, file, cd) {
+    destination: function (req, file, cb) {
         cb(null, "./public/temp")
         // all the files recieved from the user, either from form submission or any other any other method, is stored in the "./public/temp foler"
     },
