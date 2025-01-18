@@ -18,7 +18,7 @@ const registerUser = asyncHandler( async (req, res) => {
 
     // getting details of user from body(like form submissions or any other submissions)
     const {fullname, email, username, password} = req.body
-    console.log("fullname", fullname);
+    // console.log("fullname", fullname);
 
    if(
     [fullname, email, username, password].some( (field) => field?.trim() === "")
@@ -30,7 +30,7 @@ const registerUser = asyncHandler( async (req, res) => {
     const exsistedUser = await User.findOne({
         $or: [{username}, {email}]
     })
-    console.log(exsistedUser);
+    // console.log(exsistedUser);
 
     // if that username or email exsists that throw an error
     if(exsistedUser) {
@@ -42,7 +42,12 @@ const registerUser = asyncHandler( async (req, res) => {
     //multer middleware modifies the req object and gives us acess to req.files, which have coverImage, avatar etc
     const avatarLocalPath = req.files?.avatar[0]?.path
 
-    const coverImageLocalPath = req.files?.coverImage[0]?.path
+    //const coverImageLocalPath = req.files?.coverImage[0]?.paths
+
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files[0].path
+    }
 
     if(!avatarLocalPath) {
         throw new ApiError(400, "Avatar is required")
