@@ -2,6 +2,7 @@ import connectDB from "./db/index.js";
 import dotenv from 'dotenv'
 import { app } from './app.js'
 
+// .config() method loads all the data inside the .env file into process.env, allowing us to acess the variables
 dotenv.config({
     path: './env'
 })
