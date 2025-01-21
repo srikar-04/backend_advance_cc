@@ -50,6 +50,8 @@ const userSchema = new Schema({
 
 }, {timestamps: true})
 
+// the pre method runs before a document is saved to database
+// The save hook is triggered when calling .save() or .create() on a Mongoose model.
 userSchema.pre("save", async function(next) {
     // the conditionaning below ensures that, hashing is performed only when "password" field changes but not other fields. suppose if there is any change in any other field lets say avatar, the control, as expected goes to "pre" hook and the password is hashed again which is not a good thing. So if there is no modification in 'PASSWORD FIELD' then the password "should not be hashed" and the control should return back. this is done by the logic written below
 
