@@ -1,6 +1,11 @@
-console.log("Hello World");
-let a: number = 10;
-let b: number = 20;
-let c: number = a + b;
+import express, { type Request, type Response } from "express";
 
-let d: number = 30;
+const app = express();
+
+app.get("/", (req: Request, res: Response) => {
+    res.send("Hello World from new ts project");
+});
+
+app.listen(3000, () => {
+    console.log("Server is running on port 3000");
+});
