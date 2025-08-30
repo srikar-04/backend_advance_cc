@@ -1,10 +1,7 @@
 import express, { type Request, type Response, type Express } from "express";
 
-interface MyExpress extends Express {
-    db: string;
-}
 
-const app: MyExpress = express() as MyExpress;
+const app = express()
 
 app.use(express.json())
 
