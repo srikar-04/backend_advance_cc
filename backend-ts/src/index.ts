@@ -12,7 +12,7 @@ connectDB()
 .then(() => {
     const server = app.listen(PORT)
 
-    server.on('connect', () => {
+    server.on('listening', () => {
         console.log(`app is listening on port ${PORT}`);
     })
 

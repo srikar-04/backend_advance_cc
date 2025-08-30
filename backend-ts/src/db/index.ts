@@ -10,8 +10,8 @@ export default async function connectDB() {
         if (!MONGODB_NAME || !MONGODB_URI) throw new Error('missing mongo db connection string or mongodb name')
     
         const connectionInstance = await mongoose.connect(`${MONGODB_URI}/${MONGODB_NAME}`)
-        console.log('connectionInstance', connectionInstance)
-        console.log('Data base connected successfully!!', connectionInstance.connection.host)
+        // console.log('connectionInstance', connectionInstance)
+        // console.log('Data base connected successfully!!', connectionInstance.connection.host)
 
     } catch (error) {
         if (error instanceof Error) {
@@ -23,7 +23,7 @@ export default async function connectDB() {
     }
 }
 
-connectDB()
+// connectDB()
 
 mongoose.connection.on('error', (err) => {
     console.error('Database post connection error : ', err)
