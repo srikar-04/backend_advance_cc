@@ -17,6 +17,8 @@
   "description": "",
   "dependencies": {
     "express": "^5.1.0",
+    "mongodb": "^6.19.0",
+    "mongoose": "^8.18.0",
     "typescript": "^5.9.2"
   },
   "devDependencies": {

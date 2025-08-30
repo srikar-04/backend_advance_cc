@@ -1,15 +1,8 @@
 import dotenv from "dotenv"
 dotenv.config()
-import express, { type Request, type Response } from "express";
+import app from "#app.js";
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 3000
 
-const app = express();
+// code for connecting database
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Hello World from new ts project");
-});
-
-app.listen(PORT, () => {
-    console.log("Server is running on port " + PORT);
-});
