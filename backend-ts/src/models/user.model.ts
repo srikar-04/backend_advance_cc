@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types, type InferSchemaType} from "mongoose";
+import mongoose, { Schema, Types, type HydratedDocument, type InferSchemaType} from "mongoose";
 
 // define the schema
 const userSchema = new Schema({
@@ -39,7 +39,10 @@ const userSchema = new Schema({
 
 }, {timestamps: true});
 
-type userSchemaType = InferSchemaType<typeof userSchema>;
+export type UserSchemaType = InferSchemaType<typeof userSchema>;
 
+// hydrated document containing the methods, getters and setters
+// the instance returned by the mongoose document will be of this type
+export type UserDocument = HydratedDocument<UserSchemaType> 
 
-export const User = mongoose.model<userSchemaType>("User", userSchema);
+export const User = mongoose.model<UserSchemaType>("User", userSchema);
