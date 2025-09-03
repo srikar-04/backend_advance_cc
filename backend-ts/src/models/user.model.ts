@@ -9,6 +9,7 @@ const userSchema = new Schema({
         unique: true,
         lowercase: true,
         trim: true,
+        index: true
     },
     email: {
         type: String,
@@ -19,18 +20,23 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    refreshToken: {
+        type: String
+    },
     fullName: {
         type: String,
         required: true,
         trim: true,
     },
-    watchHistory: {
-        type: Types.ObjectId,
-        ref: 'Video'
-    },
+    watchHistory: [
+        {
+            type: Types.ObjectId,
+            ref: 'Video'
+        }
+    ],
     avatar: String,
     coverImage: String
-    
+
 }, {timestamps: true});
 
 type userSchemaType = InferSchemaType<typeof userSchema>;

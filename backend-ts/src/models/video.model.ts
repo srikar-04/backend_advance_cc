@@ -1,4 +1,5 @@
 import mongoose, { Schema, Types, type InferSchemaType} from "mongoose";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 // define the schema
 const videoSchema = new Schema({
@@ -17,6 +18,7 @@ const videoSchema = new Schema({
     },
     views: {
         type: Number,
+        default: 0,
         required: true
     },
     owner: {
@@ -37,6 +39,7 @@ const videoSchema = new Schema({
     }
 }, {timestamps: true});
 
+videoSchema.plugin(mongooseAggregatePaginate)
 
 type videoSchemaType = InferSchemaType<typeof videoSchema>;
 
