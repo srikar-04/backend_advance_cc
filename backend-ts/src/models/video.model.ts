@@ -1,8 +1,9 @@
 import mongoose, { Schema, Types, type HydratedDocument, type InferSchemaType} from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+import { type IVideo } from "../types/model_types.js";
 
 // define the schema
-const videoSchema = new Schema({
+const videoSchema = new Schema<IVideo>({
     // define the fields
     thumbnail: {
         type: String,
@@ -41,8 +42,4 @@ const videoSchema = new Schema({
 
 videoSchema.plugin(mongooseAggregatePaginate)
 
-export type VideoSchemaType = InferSchemaType<typeof videoSchema>;
-
-export type VideoDocument = HydratedDocument<VideoSchemaType>
-
-export const Video = mongoose.model<VideoSchemaType>("Video", videoSchema);
+export const Video = mongoose.model<IVideo>("Video", videoSchema);

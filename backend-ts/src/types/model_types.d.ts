@@ -22,3 +22,17 @@ export interface IUserMethods {
     generateRefreshToken(this: UserDocument): string
     verifyPassword(this: UserDocument, password: string): Promise<boolean>
 }
+
+
+export interface IVideo {
+    thumbnail: string
+    title: string
+    description: string
+    views: number
+    owner?: Types.ObjectId
+    duration: number
+    isPublished: boolean
+    videoFile: string
+}
+
+export type VideoDocument = HydratedDocument<IVideo>
