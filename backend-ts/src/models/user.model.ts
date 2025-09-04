@@ -58,5 +58,44 @@ userSchema.pre("save", async function(
     next()
 })
 
+userSchema.methods.verifyPassword = async function(this: UserDocument, password) {
+    return await bcrypt.compare(password, this.password)
+}
+
+const {ACCESS_TOKEN_SECRET} = process.env
+
+if (!ACCESS_TOKEN_SECRET) {
+    throw new Error("ACCESS_TOKEN_SECRET is not defined");
+}
+
+userSchema.methods.generateAccessToken = function() {
+ 
+    return jwt.sign(
+        {
+            _id: this._id,
+            username: this.username,
+            email: this.email
+        },
+        ACCESS_TOKEN_SECRET,
+        { expiresIn: "1d" }
+    )
+}
+
+userSchema.methods.generateRefreshToken = function() {
+
+    const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET
+
+    if(!REFRESH_TOKEN_SECRET) throw new Error('REFRESH_TOKEN is not defined')
+
+    return jwt.sign(
+        {
+            _id: this._id,  // this id is present in DB
+        },
+        REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: "10d"
+        }
+    )
+}
 
 export const User = mongoose.model<IUser, UserModel>("User", userSchema);
