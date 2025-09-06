@@ -1,14 +1,9 @@
 import type { HydratedDocument, Types, Model } from "mongoose"
+import type { UserInput } from "../schemas/user.schema.ts"
+import type { VideoInput } from "../schemas/video.schema.ts"
 
-export interface IUser {
-    username: string
-    email: string
-    password: string
-    refreshToken?: string
-    fullName: string
+export interface IUser extends UserInput {
     watchHistory?:Types.ObjectId[]
-    avatar?: string,
-    coverImage?: string
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -24,15 +19,8 @@ export interface IUserMethods {
 }
 
 
-export interface IVideo {
-    thumbnail: string
-    title: string
-    description: string
-    views: number
+export interface IVideo extends VideoInput{
     owner?: Types.ObjectId
-    duration: number
-    isPublished: boolean
-    videoFile: string
 }
 
 export type VideoDocument = HydratedDocument<IVideo>

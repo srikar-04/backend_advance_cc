@@ -10,3 +10,5 @@ export const video = z.object({
     isPublished: z.boolean(),
     videoFile: z.string()
 })
+
+export type VideoInput = z.infer<typeof video>

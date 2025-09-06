@@ -14,3 +14,5 @@ export const user = z.object({
     avatar: z.string().optional(),
     coverImage: z.string().optional()
 })
+
+export type UserInput = z.infer<typeof user>
