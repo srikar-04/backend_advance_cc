@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-const user = z.object({
+export const user = z.object({
     username: z.string().trim().toLowerCase().min(3, {error: 'username should be above 3 characters'}),
     email: z.email({
         error: 'invalid email format'
