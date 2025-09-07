@@ -1,6 +1,5 @@
 import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
 import fs from 'fs/promises';
-import path from 'path';
 
 // Environment validation
 const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
