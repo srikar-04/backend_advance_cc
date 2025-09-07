@@ -6,3 +6,5 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
         message: 'controller succesful'
     })
 })
+
+export {registerUser}
