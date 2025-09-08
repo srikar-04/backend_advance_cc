@@ -10,8 +10,8 @@ export const user = z.object({
     fullName: z.string().trim().min(3, {error: 'fullname should be above 3 characters'}),
     watchHistory: z.array(
         z.string().regex(/^[a-fA-F0-9]{24}$/, {error: "Invalid ObjectId Format"})
-    ),
-    avatar: z.string().optional(),
+    ).optional(),
+    avatar: z.string(),
     coverImage: z.string().optional()
 })
 

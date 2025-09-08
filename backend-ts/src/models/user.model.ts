@@ -37,7 +37,10 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
             ref: 'Video'
         }
     ],
-    avatar: String,
+    avatar: {
+        type: String,
+        required: true
+    },
     coverImage: String
 
 }, {timestamps: true});
