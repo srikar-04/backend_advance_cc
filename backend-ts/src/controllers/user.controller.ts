@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import type { IUser } from "../types/model_types.js";
+import ApiResponse from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
@@ -49,11 +50,17 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
         avatar: cloudinaryResponse.data.url
     }
 
-    await User.create(newUser)
+    const user = await User.create(newUser)
 
-    return res.status(202).json({
-        message: 'controller succesful'
-    })
+    const createdUser = User.findById(user._id).select(
+        '-password -refreshToken'
+    )
+
+    if(!createdUser) throw new ApiError(500, 'user not present in db')
+
+    return res.status(201).json(
+        new ApiResponse(200, createdUser, 'user registered successfuly')
+    )
 })
 
 export {registerUser}
