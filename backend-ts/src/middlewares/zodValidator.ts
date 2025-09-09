@@ -7,7 +7,7 @@ type Location = "body" | "params" | "query";
 export function validateSchema<T extends ZodTypeAny>(schema: T, loc: Location = "body"): RequestHandler {
 
     return (req, res, next) => {
-        const payload = loc === "body" ? req.body : (loc == 'params' ? req.params : req.query)
+        const payload = loc === "body" ? req.body : (loc === 'params' ? req.params : req.query)
 
         const result = schema.safeParse(payload)
 
@@ -27,9 +27,11 @@ export function validateSchema<T extends ZodTypeAny>(schema: T, loc: Location = 
             })
         }
 
-        if (loc === 'body') req.body = result.data
-        if (loc === 'params') req.params = result.data
-        if (loc === "query") req.query = result.data
+        res.locals.validated = res.locals.validated ?? {}
+
+        if (loc === 'body') res.locals.validated.body = result.data
+        if (loc === 'params') res.locals.validated.params = result.data
+        if (loc === "query") res.locals.validated.query = result.data
 
         next();
     }
