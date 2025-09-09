@@ -11,7 +11,7 @@ export const user = z.object({
     watchHistory: z.array(
         z.string().regex(/^[a-fA-F0-9]{24}$/, {error: "Invalid ObjectId Format"})
     ).optional(),
-    avatar: z.string(),
+    avatar: z.string().optional(),
     coverImage: z.string().optional()
 })
 

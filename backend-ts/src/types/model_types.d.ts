@@ -2,11 +2,12 @@ import type { HydratedDocument, Types, Model } from "mongoose"
 import type { UserInput } from "../schemas/user.schema.ts"
 import type { VideoInput } from "../schemas/video.schema.ts"
 
-export interface IUser extends UserInput {
-    watchHistory?:Types.ObjectId[]
+export type IUser = Omit<UserInput, "watchHistory" | "avatar"> & {
+    watchHistory?: Types.ObjectId[];  // DB stores ObjectId[]
+    avatar: string;                   // DB expects the final avatar URL (required)
     createdAt?: Date;
     updatedAt?: Date;
-}
+};
 
 export type UserDocument = HydratedDocument<IUser, IUserMethods>
 
