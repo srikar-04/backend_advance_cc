@@ -1,10 +1,9 @@
-import * as z from 'zod'
-import { type ZodTypeAny } from 'zod/v3';
+import { type ZodSchema } from 'zod';
 import { type RequestHandler } from "express";
 
 type Location = "body" | "params" | "query";
 
-export function validateSchema<T extends ZodTypeAny>(schema: T, loc: Location = "body"): RequestHandler {
+export function validateSchema<T extends ZodSchema>(schema: T, loc: Location = "body"): RequestHandler {
 
     return async (req, res, next) => {
         try {
