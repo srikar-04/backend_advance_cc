@@ -42,12 +42,23 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
         throw new ApiError(400, cloudinaryResponse.error)
     }
 
+    let coverImageUrl = ""
+
+    if(coverImageLocalPath) {
+        const coverImageCloudinaryResponse = await uploadOnCloudinary(coverImageLocalPath)
+        if(!coverImageCloudinaryResponse.success)  {
+            throw new ApiError(400, coverImageCloudinaryResponse.error)
+        }
+        coverImageUrl = coverImageCloudinaryResponse.data.url
+    }
+
     const newUser: IUser = {
         username,
         email,
         fullName,
         password,
-        avatar: cloudinaryResponse.data.url
+        avatar: cloudinaryResponse.data.url,
+        coverImage: coverImageUrl
     }
 
     const user = await User.create(newUser)
