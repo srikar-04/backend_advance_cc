@@ -52,7 +52,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
     const user = await User.create(newUser)
 
-    const createdUser = User.findById(user._id).select(
+    const createdUser = await User.findById(user._id).lean().select(
         '-password -refreshToken'
     )
 
