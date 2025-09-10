@@ -5,7 +5,7 @@ export const video = z.object({
     title: z.string().trim(),
     description: z.string(),
     views: z.number().default(0),
-    owner: z.string().regex(/^[a-fA-F0-9]{24}$/, {error: "Invalid ObjectId Format"}),
+    owner: z.string().regex(/^[a-fA-F0-9]{24}$/, {error: "Invalid ObjectId Format"}).optional(),
     duration: z.number(),
     isPublished: z.boolean(),
     videoFile: z.string()

@@ -1,6 +1,6 @@
 import type { HydratedDocument, Types, Model } from "mongoose"
-import type { UserInput } from "../schemas/user.schema.ts"
-import type { VideoInput } from "../schemas/video.schema.ts"
+import type { UserInput } from "../schemas/user.schema.js"
+import type { VideoInput } from "../schemas/video.schema.js"
 
 export type IUser = Omit<UserInput, "watchHistory" | "avatar"> & {
     watchHistory?: Types.ObjectId[];  // DB stores ObjectId[]
@@ -19,9 +19,9 @@ export interface IUserMethods {
     verifyPassword(this: UserDocument, password: string): Promise<boolean>
 }
 
-
-export interface IVideo extends VideoInput{
-    owner?: Types.ObjectId
+export type IVideo = Omit<VideoInput, "owner"> & {
+    owner: Types.ObjectId
 }
+
 
 export type VideoDocument = HydratedDocument<IVideo>

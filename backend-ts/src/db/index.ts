@@ -11,7 +11,7 @@ export default async function connectDB() {
     
         const connectionInstance = await mongoose.connect(`${MONGODB_URI}/${MONGODB_NAME}`)
         // console.log('connectionInstance', connectionInstance)
-        // console.log('Data base connected successfully!!', connectionInstance.connection.host)
+        console.log('Data base connected successfully!!', connectionInstance.connection.host)
 
     } catch (error) {
         if (error instanceof Error) {

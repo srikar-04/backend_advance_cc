@@ -23,8 +23,9 @@ const videoSchema = new Schema<IVideo>({
         required: true
     },
     owner: {
-        type: Types.ObjectId,
-        ref: 'User'
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
     },
     duration: {
         type: Number,
