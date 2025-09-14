@@ -65,7 +65,12 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         next()
 
     } catch (error) {
-        console.error("Auth middleware error : ",error)
-        throw new ApiError(401,"internal auth validation error")
+        console.error("Auth middleware error : ", error)
+        // If it's already an ApiError, re-throw it
+        if (error instanceof ApiError) {
+            throw error
+        }   
+        // Handle any other unexpected errors
+        throw new ApiError(500, "Internal server error")
     }
 }

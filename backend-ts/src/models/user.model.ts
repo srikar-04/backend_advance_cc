@@ -80,7 +80,7 @@ userSchema.methods.generateAccessToken = function() {
             email: this.email
         },
         ACCESS_TOKEN_SECRET,
-        { expiresIn: "15m" }
+        { expiresIn: "1d" }
     )
 }
 

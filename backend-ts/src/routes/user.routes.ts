@@ -3,6 +3,7 @@ import { loginUser, registerUser } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { validateSchema } from "../middlewares/zodValidator.middleware.js";
 import { user } from "../schemas/user.schema.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
@@ -30,6 +31,14 @@ router.route('/register').post(
     registerUser
 )
 router.route('/login').post(loginUser)
+
+router.route('/protected-route').post(authMiddleware, (req, res, next) => {
+    res.json({
+        id: res.locals.user._id,
+        username: res.locals.user.fullName,
+        message: 'successfully accessed protected route'
+    })
+})
 
 
 export default router
