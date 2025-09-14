@@ -41,7 +41,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         } catch (error) {
             if(error instanceof jwt.JsonWebTokenError) {
                 if(error.name === "TokenExpiredError") {
-                    throw new ApiError(401, 'token expired')
+                    throw new ApiError(401, 'access token expired')
                 }
                 throw new ApiError(401, 'invalid access token')
             }
