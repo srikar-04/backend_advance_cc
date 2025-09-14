@@ -8,6 +8,7 @@ import type { IUser } from "../types/model_types.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import {type UserDocument } from "../types/model_types.js";
 import type { ObjectId } from "mongodb";
+import jwt from "jsonwebtoken"
 
 export const generateAccessTokenAndRefreshToken = async (userId: ObjectId) => {
 
@@ -154,7 +155,57 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
 })
 
+const logoutUser = asyncHandler( async (req: Request, res:Response, next: NextFunction) => {
+
+
+    const token = req.cookies?.refreshToken
+
+    const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax' as const,
+        maxAge: 0
+    };
+
+    if(!REFRESH_TOKEN_SECRET) throw new ApiError(401, 'refresh token secret not found')
+
+    let payload: any;
+
+    try {
+        payload = jwt.verify(token, REFRESH_TOKEN_SECRET)
+    } catch (error) {
+        if(error instanceof jwt.JsonWebTokenError) {
+            if(error.name === "TokenExpiredError") {
+                return res.json(new ApiResponse(200, 'user logged out'))
+            }
+            return res.json(new ApiResponse(200, 'user logged out'))
+        }
+        return res.json(new ApiResponse(200, 'user logged out'))
+    }
+
+    await User.findByIdAndUpdate(
+        payload._id,
+        {
+            $set: {
+                refreshToken: "",
+            },
+        },
+        {
+            new: true,
+        }
+    )
+
+    return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "user logged out"));
+})
+
 export {
     registerUser,
     loginUser,
+    logoutUser
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUser, registerUser } from "../controllers/user.controller.js";
+import { loginUser, logoutUser, registerUser } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { validateSchema } from "../middlewares/zodValidator.middleware.js";
 import { user } from "../schemas/user.schema.js";
@@ -31,6 +31,7 @@ router.route('/register').post(
     registerUser
 )
 router.route('/login').post(loginUser)
+router.route('/logout').post(logoutUser)
 
 router.route('/protected-route').post(authMiddleware, (req, res, next) => {
     res.json({
