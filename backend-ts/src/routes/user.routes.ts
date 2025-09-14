@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { registerUser } from "../controllers/user.controller.js";
+import { loginUser, registerUser } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { validateSchema } from "../middlewares/zodValidator.js";
+import { validateSchema } from "../middlewares/zodValidator.middleware.js";
 import { user } from "../schemas/user.schema.js";
 
 const router = Router()
@@ -29,6 +29,7 @@ router.route('/register').post(
     validateSchema(user, "body"),
     registerUser
 )
+router.route('/login').post(loginUser)
 
 
 export default router

@@ -9,11 +9,11 @@ import ApiResponse from "../utils/ApiResponse.js";
 import {type UserDocument } from "../types/model_types.js";
 import type { ObjectId } from "mongodb";
 
-const generateAccessTokenAndRefreshToken = async (userId: ObjectId) => {
+export const generateAccessTokenAndRefreshToken = async (userId: ObjectId) => {
 
     const registeredUser: UserDocument | null = await User.findById(userId)
 
-    if(!registeredUser) throw new ApiError(404, "user not found")
+    if(!registeredUser) throw new ApiError(404, "user not found while generating access and refresh tokens")
 
     const accessToken = registeredUser.generateAccessToken()
     const refreshToken = registeredUser.generateRefreshToken()
@@ -125,7 +125,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
     let {accessToken, refreshToken} = await generateAccessTokenAndRefreshToken(registeredUser._id)
 
-    const loggedinUser = await User.findById(registeredUser._id).lean().select('-password, -refreshToken')
+    const loggedinUser = await User.findById(registeredUser._id).lean().select('-password -refreshToken')
 
     const options = {
         httpOnly: true,
@@ -135,7 +135,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     res
     .status(200)
     .cookie('refreshToken', refreshToken, options)
-    .cookie('accessToken', accessToken)
+    .cookie('accessToken', accessToken, options)
     .json(
         new ApiResponse(
             200,
