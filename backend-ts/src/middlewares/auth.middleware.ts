@@ -7,20 +7,45 @@ import { User } from "../models/user.model.js"
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const token = req.header("Authorization")?.replace("Bearer ", "") || req.cookies?.accessToken
+        // 1) get token from Authorization header (case-insensitive)
+        const authHeader = (req.get('authorization') || '') as string;
+        let token: string | undefined;
 
-        if(!token) {
-            throw new ApiError(401, 'unauthorized request')
+        const bearerMatch = authHeader.match(/Bearer\s+(.+)/i);
+        if (bearerMatch) {
+            token = bearerMatch[1];
+        }
+
+        // 2) fallback to cookie only if your app uses cookie-stored access tokens
+        // NOTE: prefer Authorization header + in-memory access token for SPAs.
+        if (!token && req.cookies?.accessToken) {
+            token = req.cookies.accessToken;
+        }
+
+        if (!token) {
+            throw new ApiError(401, 'Unauthorized: access token missing')
         }
 
         const {ACCESS_TOKEN_SECRET} = process.env
 
         if(!ACCESS_TOKEN_SECRET) throw new ApiError(401, 'token secret not found')
         
-        const payload = jwt.verify(token, ACCESS_TOKEN_SECRET) as {
-            _id: Types.ObjectId,
-            username: string,
-            email: string
+        let payload: any;
+
+        try {
+            payload = jwt.verify(token, ACCESS_TOKEN_SECRET) as {
+                _id: Types.ObjectId,
+                username: string,
+                email: string
+            }
+        } catch (error) {
+            if(error instanceof jwt.JsonWebTokenError) {
+                if(error.name === "TokenExpiredError") {
+                    throw new ApiError(401, 'token expired')
+                }
+                throw new ApiError(401, 'invalid access token')
+            }
+            throw new ApiError(401, 'invalid access token')
         }
     
         const userId = payload._id
@@ -40,7 +65,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         next()
 
     } catch (error) {
-        console.error(error)
-        throw new ApiError(401, 'invalid/expired token')
+        console.error("Auth middleware error : ",error)
+        throw new ApiError(401,"internal auth validation error")
     }
 }
